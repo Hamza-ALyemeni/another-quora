@@ -8,20 +8,32 @@ int main(){
     // int x , y;
 
     // cin>>x>>y;
+        ifstream fin("read-file.txt");
+        ofstream fout("output-file.txt");
+        int x = 0;
+        int arr[10];
 
-    ifstream fin('just-created-file.txt');
-
-    if (fin.fail())
+    while(x < 10)
     {
-        cout<<"cant open the file\n";
-        return 0;
+        if (fin.fail()){
+            cout<<"cant open the input file\n";
+            return 0;
+        }
+
+        fin>>arr[x];
+        x++;
+        // fin.close();
+
     }
-    int x , y;
-    fin>>x>>y;
 
-    cout<<x + y;
-
-    fin.close();
-
+    for (int i = 0; i < 10; i++)
+    {
+          if (fout.fail()){
+            fout<<"cant open the output file\n";
+            return 0;
+        }
+        fout<<arr[i]<<"\n";
+    }
+    
     return 0;
 }
