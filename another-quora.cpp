@@ -31,7 +31,7 @@ struct user{
         cin>>email;
         cout<<"Do you want to accept anonymous questions write 1 for yes and 0 for no: ";
         cin>>accept_anonymous;
-        id++;
+        // id++;
     }
     
 };
@@ -48,8 +48,8 @@ struct question_answer{
 struct quora{
     vector<user> users; 
     vector<question_answer> chat; 
-    int users_added = 0;
-    int questions_added = 0;
+    int users_id = 0;
+    // int questions_added = 0;
     int session_id = -1;
 
    void print_users() {
@@ -70,11 +70,7 @@ struct quora{
         }
     }
 
-
-    void regster(){
-
-    }
-
+   
     bool signin() {
         string n;
         string pass;
@@ -111,6 +107,7 @@ struct quora{
 			else if (choice == 2){
 				user u;
                 u.signup();
+                u.id = users_id++;
                 users.push_back(u);
             }
 			else{
@@ -152,16 +149,15 @@ struct quora{
 			// 	print_library_by_id();
 			// else if (choice == 5)
 			// 	print_library_by_name();
-			if (choice == 6) {
+			if (choice == 6)
                 print_users();
-            }
-			else if (choice == 9) {
+			else if (choice == 8) {
                 logout();
                 break;
             }
-			else{
-			//	break;
-            }
+			else
+		    	break;
+            
 		}
 	}
 
@@ -176,12 +172,12 @@ struct quora{
 			cout << "5) Ask Questions \n";
 			cout << "6) List System Users \n";
 			cout << "7) Feed \n";
-			cout << "9) Logout \n";
+			cout << "8) Logout \n";
 
-			cout << "\n Enter your menu choice [1 - 9]: ";
+			cout << "\n Enter your menu choice [1 - 8]: ";
 			cin >> choice;
 
-			if (!(1 <= choice && choice <= 9)) {
+			if (!(1 <= choice && choice <= 8)) {
 				cout << "Invalid choice. Try again\n";
 				choice = -1;	// loop keep working
 			}
