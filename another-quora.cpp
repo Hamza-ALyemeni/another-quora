@@ -31,8 +31,8 @@ struct user{
         cin>>email;
         cout<<"Do you want to accept anonymous questions write 1 for yes and 0 for no: ";
         cin>>accept_anonymous;
-        // id++;
     }
+    
     
 };
 
@@ -41,36 +41,64 @@ struct question_answer{
     int sender_id; 
     int reciver_id;
     int parent_id;
-    pair<string,string> conversation;
-    
+    string question;
+    string answer;
 };
 
 struct quora{
     vector<user> users; 
     vector<question_answer> chat; 
     int users_id = 0;
-    // int questions_added = 0;
+    int question_added = 0;
     int session_id = -1;
 
    void print_users() {
-        cout << "Printing users...\n";
-
         if (users.empty()) {
             cout << "No users found.\n";
         } else {
             for (int i = 0; i < users.size(); i++) {
-                cout << users[i].id << "\n";
-                cout << users[i].name << "\n";
-                cout << users[i].username << "\n";
-                cout << users[i].password << "\n";
-                cout << users[i].email << "\n";
-                cout << "**********" << "\n";
+                cout << "ID : "<<users[i].id << "         ";
+                cout <<" Name : "<< users[i].name << "\n";
             }
-            cout << "End of users.\n";
         }
     }
 
-   
+    bool search_user_id(int id){
+          for (int i = 0; i < users.size(); i++) {
+               if (users[i].id == id)
+                    return true;  
+            }
+        return false;
+    }
+
+     bool search_question_id(int id){
+          for (int i = 0; i < users.size(); i++) {
+               if (chat[i].id == id)
+                    return true;  
+            }
+        return false;
+    }
+
+    void ask(){
+        cout<<"Enter user id or -1 to cancel : ";
+        cin>>chat[question_added].reciver_id;
+        if(search_user_id(chat[question_added].reciver_id)){
+            if(users[chat[question_added].reciver_id].accept_anonymous == false)
+                cout<<"this user deos not accept anonymous questions ";
+            
+            cout<<"Enter Question id or for new question : ";
+            while (!search_question_id(chat[question_added].id))
+            {
+                cin>>chat[question_added].id;
+            }
+           chat[question_added].sender_id = session_id;
+           question_added++;
+        }
+        else if(chat[question_added].reciver_id == -1)
+            return;
+        else
+            cout<<"this user is does not exist .";
+    }
     bool signin() {
         string n;
         string pass;
