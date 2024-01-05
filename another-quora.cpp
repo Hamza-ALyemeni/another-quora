@@ -43,6 +43,15 @@ struct question_answer{
     int parent_id;
     string question;
     string answer;
+     
+    question_answer(){
+        id = 0;
+        sender_id = 0;
+        reciver_id = 0;
+        parent_id = 0;
+        question = "";
+        answer = "Not Answerd Yet";
+    }
 };
 
 struct quora{
@@ -79,26 +88,94 @@ struct quora{
         return false;
     }
 
+    void feed(){
+        for (int i = 0; i < chat.size(); i++)
+        {
+            cout<<"\n Question ID : ("<<chat[i].id<<") "<<" from user id : ("<<chat[i].sender_id<<") to user id : ("<<chat[i].reciver_id<<")       "<<"Question :" << chat[i].question <<"\n";
+            cout<<"         Answer : "<<chat[i].answer; 
+        }
+    }
+
     void ask(){
+        question_answer qa; 
+        chat.push_back(qa); 
         cout<<"Enter user id or -1 to cancel : ";
+        int question_id;
         cin>>chat[question_added].reciver_id;
-        if(search_user_id(chat[question_added].reciver_id)){
+        if(search_user_id(chat[question_added].reciver_id) == true){
             if(users[chat[question_added].reciver_id].accept_anonymous == false)
-                cout<<"this user deos not accept anonymous questions ";
+                cout<<"this user deos not accept anonymous questions \n";
             
-            cout<<"Enter Question id or for new question : ";
-            while (!search_question_id(chat[question_added].id))
+            cout<<"Enter Question id or -1 for new question : ";
+            cin>>question_id;
+            if (search_question_id(question_id))
             {
-                cin>>chat[question_added].id;
+                 cout << "Enter Question: ";
+                 cin.ignore(); // Clear the input buffer
+                 getline(cin, chat[question_added].question);
+                 chat[question_added].id = question_id;
             }
+            else if(question_id == -1){
+                cout << "Enter Question: ";
+                cin.ignore(); // Clear the input buffer
+                getline(cin, chat[question_added].question);
+                chat[question_added].id = question_added;
+            }else{
+                 cout<<"there is no such question to reply on !!";
+                 return;
+            }
+            
            chat[question_added].sender_id = session_id;
            question_added++;
         }
         else if(chat[question_added].reciver_id == -1)
             return;
         else
-            cout<<"this user is does not exist .";
+            cout<<"this user does not exist .";
     }
+
+        // void ask() {
+        //     // Ensure there is an element in the vector for the current question_added index
+        //     if (question_added >= chat.size()) {
+        //         question_answer qa;  // Create a new question_answer object
+        //         chat.push_back(qa);  // Add it to the vector
+        //     }
+
+        //     cout << "Enter user id or -1 to cancel: ";
+        //     cin >> chat[question_added].reciver_id;
+
+        //     if (chat[question_added].reciver_id == -1) {
+        //         return; // Exit the function if the user chooses to cancel
+        //     }
+
+        //     if (search_user_id(chat[question_added].reciver_id)) {
+        //         if (!users[chat[question_added].reciver_id].accept_anonymous) {
+        //             cout << "This user does not accept anonymous questions.\n";
+        //             return;
+        //         }
+
+        //         cout << "Enter Question id or -1 for a new question: ";
+        //         cin >> chat[question_added].id;
+        //         if (search_question_id(chat[question_added].id)) {
+        //             cout << "Enter Question: ";
+        //             cin.ignore(); // Clear the input buffer
+        //             getline(cin, chat[question_added].question);
+        //             chat[question_added].sender_id = session_id;
+        //             question_added++;
+        //         } else if (chat[question_added].id == -1) {
+        //             cout << "Enter Question: ";
+        //             cin.ignore(); // Clear the input buffer
+        //             getline(cin, chat[question_added].question);
+        //             chat[question_added].sender_id = session_id;
+        //             question_added++;
+        //         } else {
+        //             cout << "Invalid Question id.\n";
+        //         }
+        //     } else {
+        //         cout << "This user does not exist.\n";
+        //     }
+        // }
+
     bool signin() {
         string n;
         string pass;
@@ -175,10 +252,12 @@ struct quora{
 			// 	print_who_borrowed_book_by_name();
 			// else if (choice == 4)
 			// 	print_library_by_id();
-			// else if (choice == 5)
-			// 	print_library_by_name();
-			if (choice == 6)
+			if (choice == 5)
+				ask();
+			else if (choice == 6)
                 print_users();
+            else if (choice == 7)
+                feed();
 			else if (choice == 8) {
                 logout();
                 break;
@@ -216,4 +295,6 @@ struct quora{
 int main(){
     quora sys;
     sys.run();
+
+    return 0;
 }
